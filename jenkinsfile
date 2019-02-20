@@ -1,0 +1,37 @@
+pipeline {
+    agent {
+        label 'docker-agent'
+    }
+    
+    environment {
+        CI_TOOLS = '/home/jenkins/ci-tools'
+    }
+    
+	stages {
+	    
+	    stage('Unit test') {
+		    steps {
+				sh 'mvn test'
+	    	   	junit 'target/surefire-reports/TEST-*xml'
+	   	    }
+    	}
+    	
+		stage('SonarQube analysis') {
+			steps {
+				withSonarQubeEnv('sonarQubeServer') {
+					sh '${CI_TOOLS}/sonar-scanner/sonar-scanner-3.3.0.1492-linux/bin/sonar-scanner'
+				}
+				timeout(time: 1, unit: 'HOURS') {
+		            waitForQualityGate abortPipeline: true
+		        }
+			}
+		}
+		
+		stage('Package artifact') {
+		    steps {
+			   sh 'mvn package -DskipTests=true'
+   		    }
+		}	
+	}
+}//Pipeline end
+
