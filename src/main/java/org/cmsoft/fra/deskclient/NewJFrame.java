@@ -122,9 +122,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void btnSignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignUpActionPerformed
         
-        PersonDto personDto = new PersonDto();
-        personDto.setUsername(this.txtUsername.getText());
-        personDto.setBase64Photo(ImageUtil.convertToBase64(fileChooser.getF));
+       
 
     }//GEN-LAST:event_btnSignUpActionPerformed
 
